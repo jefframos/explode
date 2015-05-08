@@ -140,7 +140,7 @@ var GameScreen = AbstractScreen.extend({
 		this.hitTouch.drawRect(0,0,windowWidth, windowHeight);
 		
 		this.hitTouch.alpha = 0;
-		this.hitTouch.hitArea = new PIXI.Rectangle(0, 0, windowWidth, windowHeight);
+		this.hitTouch.hitArea = new PIXI.Rectangle(0, 40, windowWidth, windowHeight);
 
 		this.tapDown = false;
 
@@ -435,6 +435,8 @@ var GameScreen = AbstractScreen.extend({
 
 		if(this.fistTime){
 
+			// ga('click', 'twitter');
+
 			scoreContainer = new PIXI.DisplayObjectContainer();
 			var scoreBack = new PIXI.Graphics();
 			scoreBack.beginFill(this.inHigh?addBright(APP.vecColors[APP.currentColorID],0.65):0xFFFFFF);
@@ -510,9 +512,12 @@ var GameScreen = AbstractScreen.extend({
 
 			twContainer.interactive = true;
 			twContainer.buttonMode = true;
+			twContainer.hitArea = new PIXI.Rectangle(0,0,120, 30);
 
 			// twContainer.touchend = twContainer.mouseup = function(mouseData){
 			twContainer.touchstart = twContainer.mousedown = function(mouseData){
+				window.open('https://twitter.com/home?status=http://jefframos.github.io/xplode-game/');
+				//alert('twwe');
 			};
 
 
@@ -536,9 +541,12 @@ var GameScreen = AbstractScreen.extend({
 
 			fbContainer.interactive = true;
 			fbContainer.buttonMode = true;
+			fbContainer.hitArea = new PIXI.Rectangle(0,0,120, 30);
 
 			// fbContainer.touchend = fbContainer.mouseup = function(mouseData){
 			fbContainer.touchstart = fbContainer.mousedown = function(mouseData){
+
+				window.open('https://www.facebook.com/sharer/sharer.php?u=http://jefframos.github.io/xplode-game/');
 			};
 
 		}

@@ -12,6 +12,11 @@ var LoadScreen = AbstractScreen.extend({
     build: function () {
         this._super();
 
+        var text = new PIXI.Text('PLAY', {font:'50px Vagron', fill:'#FFFFFF'});
+
+        this.addChild(text);
+        text.alpha = 0;
+
         var assetsToLoader = [];
         if(assetsToLoader.length > 0 && !this.isLoaded){
             this.loader = new PIXI.AssetLoader(assetsToLoader);
