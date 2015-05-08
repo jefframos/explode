@@ -173,6 +173,10 @@ function registerAdEvents() {
     });
 }
 
+function deviceReady() {
+    initialize();
+}
+
 var Application = AbstractApplication.extend({
     init: function() {
         function initialize() {
@@ -839,7 +843,7 @@ var Application = AbstractApplication.extend({
 }), CrazyLogo = Entity.extend({
     init: function(screen) {
         this._super(!0), this.screen = screen, this.container = new PIXI.DisplayObjectContainer(), 
-        this.title = "BOOM", this.vecLetters = [], this.tempCounter = 0, this.colorsCounter = 300, 
+        this.title = "EXPLODE", this.vecLetters = [], this.tempCounter = 0, this.colorsCounter = 300, 
         this.interval = 0;
     },
     build: function() {
@@ -1979,7 +1983,7 @@ var Application = AbstractApplication.extend({
         this.crazyLogo = new CrazyLogo(this), this.crazyLogo.build(), this.crazyLogo.getContent().position.x = windowWidth / 2 - this.crazyLogo.getContent().width / 2, 
         this.crazyLogo.getContent().position.y = .1 * windowHeight, this.endMenuContainer.addChild(this.crazyLogo.getContent()), 
         this.inHigh = !1, APP.points > APP.highscore && (APP.cookieManager.setSafeCookie("highscore", APP.points), 
-        APP.highscore = APP.points, this.inHigh = !0), this.fistTime = !0;
+        APP.highscore = APP.points, this.inHigh = !0);
         var scoreContainer = null;
         if (this.fistTime) {
             scoreContainer = new PIXI.DisplayObjectContainer();
@@ -2776,6 +2780,11 @@ var ratio = 1, init = !1, renderer, APP, retina = window.devicePixelRatio >= 2 ?
     PIXI.BaseTexture.SCALE_MODE = PIXI.scaleModes.NEAREST, requestAnimFrame(update);
 }, isfull = !1;
 
-document.addEventListener("deviceready", function() {
-    initialize();
-});
+window.console.log = function() {};
+
+var apps = -1 === document.URL.indexOf("http://") && -1 === document.URL.indexOf("https://");
+
+apps ? document.addEventListener("deviceready", deviceReady) : (res = {
+    x: window.innerWidth,
+    y: window.innerHeight
+}, deviceReady());

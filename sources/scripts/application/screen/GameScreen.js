@@ -389,7 +389,7 @@ var GameScreen = AbstractScreen.extend({
 			this.inHigh = true;
 		}
 		// this.inHigh = true;
-		this.fistTime = true;
+		// this.fistTime = true;
 		var scoreContainer = null;
 
 
