@@ -1,0 +1,16 @@
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\ApplicationIcon.png
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\Background.png
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\me.jefframos.explode.dll
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\me.jefframos.explode.pdb
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\AppManifest.xaml
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\Properties\WMAppManifest.xml
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\CordovaAppProj_Debug_AnyCPU.xap
+c:\wamp\www\explode\platforms\wp8\Bin\Debug\GoogleAds.dll
+c:\wamp\www\explode\platforms\wp8\obj\Debug\Explode.csprojResolveAssemblyReference.cache
+c:\wamp\www\explode\platforms\wp8\obj\Debug\App.g.cs
+c:\wamp\www\explode\platforms\wp8\obj\Debug\cordovalib\CordovaView.g.cs
+c:\wamp\www\explode\platforms\wp8\obj\Debug\MainPage.g.cs
+c:\wamp\www\explode\platforms\wp8\obj\Debug\me.jefframos.explode.g.resources
+c:\wamp\www\explode\platforms\wp8\obj\Debug\me.jefframos.explode.dll
+c:\wamp\www\explode\platforms\wp8\obj\Debug\me.jefframos.explode.pdb
+c:\wamp\www\explode\platforms\wp8\obj\Debug\XapCacheFile.xml
