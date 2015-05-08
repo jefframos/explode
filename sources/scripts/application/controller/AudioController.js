@@ -17,6 +17,12 @@ var AudioController = Class.extend({
 				loop: false
 			},
 			{
+				label:'error',
+				urls: ['dist/audio/error.mp3'],
+				volume: 0.5,
+				loop: false
+			},
+			{
 				label:'laser1',
 				urls: ['dist/audio/laser1.mp3'],
 				volume: 0.05,

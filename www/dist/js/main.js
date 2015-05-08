@@ -339,6 +339,11 @@ var Application = AbstractApplication.extend({
             volume: .2,
             loop: !1
         }, {
+            label: "error",
+            urls: [ "dist/audio/error.mp3" ],
+            volume: .5,
+            loop: !1
+        }, {
             label: "laser1",
             urls: [ "dist/audio/laser1.mp3" ],
             volume: .05,
@@ -646,7 +651,7 @@ var Application = AbstractApplication.extend({
 }), CrazyLogo = Entity.extend({
     init: function(screen) {
         this._super(!0), this.screen = screen, this.container = new PIXI.DisplayObjectContainer(), 
-        this.title = "EXPLODE", this.vecLetters = [], this.tempCounter = 0, this.colorsCounter = 300, 
+        this.title = "XPLODE", this.vecLetters = [], this.tempCounter = 0, this.colorsCounter = 300, 
         this.interval = 0;
     },
     build: function() {
@@ -1178,7 +1183,7 @@ var Application = AbstractApplication.extend({
         });
     },
     miss: function() {
-        this.player.breakJump = !0, this.player.velocity.y = 0;
+        APP.audioController.playSound("error"), this.player.breakJump = !0, this.player.velocity.y = 0;
         var wrongLabel = APP.vecError[Math.floor(APP.vecError.length * Math.random())], rot = .004 * Math.random(), tempLabel = new PIXI.Text(wrongLabel, {
             font: "35px Vagron",
             fill: "#ec8b78"
@@ -1203,15 +1208,14 @@ var Application = AbstractApplication.extend({
         this.player.inError = !0, this.levelCounter -= .1 * this.levelCounterMax, this.levelCounter < 0 && (this.levelCounter = 0);
     },
     shoot: function(force) {
-        if (!this.player.inError) {
-            this.startLevel = !0, this.player.jump(force), this.player.improveGravity(), this.force = 0, 
-            TweenLite.to(this.loaderBar.getContent(), .2, {
-                delay: .2,
-                alpha: 1
-            });
-            var ls = Math.floor(4 * Math.random()) + 1;
-            APP.audioController.playSound("laser" + ls), this.addCrazyMessage("HOLD");
-        }
+        if (this.player.inError) return void APP.audioController.playSound("error");
+        this.startLevel = !0, this.player.jump(force), this.player.improveGravity(), this.force = 0, 
+        TweenLite.to(this.loaderBar.getContent(), .2, {
+            delay: .2,
+            alpha: 1
+        });
+        var ls = Math.floor(4 * Math.random()) + 1;
+        APP.audioController.playSound("laser" + ls), this.addCrazyMessage("HOLD");
     },
     reset: function() {
         this.destroy(), this.build();

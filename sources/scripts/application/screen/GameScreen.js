@@ -265,6 +265,7 @@ var GameScreen = AbstractScreen.extend({
 	},
 	miss:function() {
 
+		APP.audioController.playSound('error');
 		this.player.breakJump = true;
 		this.player.velocity.y = 0;
 		var wrongLabel = APP.vecError[Math.floor(APP.vecError.length * Math.random())];
@@ -303,6 +304,7 @@ var GameScreen = AbstractScreen.extend({
 	},
 	shoot:function(force) {
 		if(this.player.inError){
+			APP.audioController.playSound('error');
 			return;
 		}
 		this.startLevel = true;
