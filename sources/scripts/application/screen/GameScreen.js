@@ -711,7 +711,9 @@ var GameScreen = AbstractScreen.extend({
 
 		// this.coinsLabel.position.x = windowWidth / 2 - this.coinsLabel.width / 2 / this.coinsLabel.resolution;
 		// this.coinsLabel.position.y = windowHeight / 2 - this.coinsLabel.height / 2 / this.coinsLabel.resolution;
-
+// this.base.position.y = windowHeight + this.player.spriteBall.height / 2;
+		TweenLite.from(this.base.position, 4, {y:this.base.position.y+50, x:this.base.position.x-windowWidth / 2, ease:'easeOutElastic'});
+		
 		TweenLite.from(this.coinsLabel.position, 4, {y:this.coinsLabel.position.y+50, x:this.coinsLabel.position.x-windowWidth / 2, ease:'easeOutElastic', onComplete:function(){
 		}});
 

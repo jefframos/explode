@@ -2209,6 +2209,10 @@ var Application = AbstractApplication.extend({
             onComplete: function() {
                 self.addCrazyMessage("HOLD AND RELEASE");
             }
+        }), TweenLite.from(this.base.position, 4, {
+            y: this.base.position.y + 50,
+            x: this.base.position.x - windowWidth / 2,
+            ease: "easeOutElastic"
         }), TweenLite.from(this.coinsLabel.position, 4, {
             y: this.coinsLabel.position.y + 50,
             x: this.coinsLabel.position.x - windowWidth / 2,
