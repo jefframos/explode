@@ -1121,7 +1121,12 @@ var Application = AbstractApplication.extend({
             self.tapDown = !1, self.shoot(self.force / 30 * windowHeight * .1);
         }, this.hitTouch.touchstart = this.hitTouch.mousedown = function(touchData) {
             self.tapDown = !0;
-        }, this.updateable = !0, APP.withAPI && GameAPI.GameBreak.request(function() {
+        }, this.updateable = !0, document.body.addEventListener("keyup", function(e) {
+            console.log(e.keyCode), (32 === e.keyCode || 40 === e.keyCode) && (self.tapDown = !1, 
+            self.shoot(APP.force / 30 * windowHeight * .1));
+        }), document.body.addEventListener("keydown", function(e) {
+            (32 === e.keyCode || 40 === e.keyCode) && (self.tapDown = !0);
+        }), APP.withAPI && GameAPI.GameBreak.request(function() {
             self.pauseModal.show();
         }, function() {
             self.pauseModal.hide();
@@ -1208,23 +1213,25 @@ var Application = AbstractApplication.extend({
         this.player.inError = !0, this.levelCounter -= .1 * this.levelCounterMax, this.levelCounter < 0 && (this.levelCounter = 0);
     },
     shoot: function(force) {
-        if (this.player.inError) return void APP.audioController.playSound("error");
-        this.startLevel = !0, this.player.jump(force), this.player.improveGravity(), this.force = 0, 
-        TweenLite.to(this.loaderBar.getContent(), .2, {
-            delay: .2,
-            alpha: 1
-        });
-        var ls = Math.floor(4 * Math.random()) + 1;
-        APP.audioController.playSound("laser" + ls), this.addCrazyMessage("HOLD");
+        if (this.player) {
+            if (this.player.inError) return void APP.audioController.playSound("error");
+            this.startLevel = !0, this.player.jump(force), this.player.improveGravity(), this.force = 0, 
+            TweenLite.to(this.loaderBar.getContent(), .2, {
+                delay: .2,
+                alpha: 1
+            });
+            var ls = Math.floor(4 * Math.random()) + 1;
+            APP.audioController.playSound("laser" + ls), this.addCrazyMessage("HOLD");
+        }
     },
     reset: function() {
         this.destroy(), this.build();
     },
     update: function() {
-        this.updateable && (this.player ? (this.player.inError || (this.tapDown && this.force < 30 && (this.force += .9, 
-        this.player.charge(), clearInterval(this.holdInterval)), this.startLevel && (this.levelCounter--, 
-        this.levelCounter < 0 && (this.levelCounter = 0))), this.player.force = this.force, 
-        this.player.velocity.y < 0 ? this.interactiveBackground.gravity = Math.abs(this.player.velocity.y) / 15 : this.interactiveBackground.gravity = 0, 
+        this.updateable && (this.player ? (this.player.inError || (this.tapDown && this.force < 30 && (APP.force = this.force += .9, 
+        this.player.charge(), console.log(this.force), clearInterval(this.holdInterval)), 
+        this.startLevel && (this.levelCounter--, this.levelCounter < 0 && (this.levelCounter = 0))), 
+        this.player.force = this.force, this.player.velocity.y < 0 ? this.interactiveBackground.gravity = Math.abs(this.player.velocity.y) / 15 : this.interactiveBackground.gravity = 0, 
         this.levelCounter <= 0 && this.gameOver(), this.loaderBar.updateBar(this.levelCounter, this.levelCounterMax)) : this.interactiveBackground.gravity = 1, 
         this.crazyLogo && this.crazyLogo.update(), this.base && (this.base.side || (this.base.side = 1), 
         this.base.alpha += .01 * this.base.side, (this.base.alpha > .5 || this.base.alpha <= .1) && (this.base.side *= -1)), 
@@ -1233,8 +1240,7 @@ var Application = AbstractApplication.extend({
     gameOver: function() {
         if (this.endGame) return this.crazyContent.alpha = 0, this.coinsLabel.alpha = 0, 
         void (this.loaderBar.getContent().alpha = 0);
-        window.navigator && navigator.vibrate(200), this.hitTouch.parent.removeChild(this.hitTouch), 
-        setTimeout(function() {
+        this.hitTouch.parent.removeChild(this.hitTouch), setTimeout(function() {
             self.player.preKill();
         }, 100), this.targetJump.preKill(), this.base.parent.removeChild(this.base), this.earthquake(40), 
         this.endGame = !0, this.crazyContent.alpha = 0, this.coinsLabel.alpha = 0, this.loaderBar.getContent().alpha = 0, 
@@ -1337,39 +1343,46 @@ var Application = AbstractApplication.extend({
                 window.open("https://www.facebook.com/sharer/sharer.php?u=http://jefframos.github.io/xplode-game/");
             };
         }
-        var playAgainContainer = new PIXI.DisplayObjectContainer(), playAgainButton = new PIXI.Graphics();
-        playAgainButton.beginFill(16777215), playAgainButton.drawRoundedRect(0, 0, 100, 60, 5);
-        var playAgainLabel = new PIXI.Text("PLAY", {
-            align: "center",
-            font: "30px Vagron",
-            fill: APP.vecColorsS[APP.currentColorID],
-            wordWrap: !0,
-            wordWrapWidth: 500
-        });
-        playAgainLabel.position.x = 15, playAgainLabel.position.y = 10, playAgainLabel.resolution = 2, 
-        playAgainContainer.addChild(playAgainButton), playAgainContainer.addChild(playAgainLabel), 
-        this.endMenuContainer.addChild(playAgainContainer), playAgainContainer.position.x = windowWidth / 2 - playAgainButton.width / 2, 
-        playAgainContainer.position.y = scoreContainer ? scoreContainer.position.y + scoreContainer.height + 20 : .8 * windowHeight - playAgainContainer.height, 
-        playAgainContainer.interactive = !0, playAgainContainer.buttonMode = !0, playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData) {
-            TweenLite.to(self.endMenuContainer, 1, {
-                x: windowWidth,
-                y: -50,
-                ease: "easeOutCubic",
-                onComplete: function() {
-                    self.reset();
-                }
-            }), self.crazyLogo.removeInterval(), self.interactiveBackground.accel = 5, TweenLite.to(self.interactiveBackground, 2, {
-                accel: 0
-            }), APP.audioController.playSound("play");
-        }, TweenLite.from(this.crazyLogo.getContent(), 4.5, {
+        setTimeout(function() {
+            var playAgainContainer = new PIXI.DisplayObjectContainer(), playAgainButton = new PIXI.Graphics();
+            playAgainButton.beginFill(16777215), playAgainButton.drawRoundedRect(0, 0, 100, 60, 5);
+            var playAgainLabel = new PIXI.Text("PLAY", {
+                align: "center",
+                font: "30px Vagron",
+                fill: APP.vecColorsS[APP.currentColorID],
+                wordWrap: !0,
+                wordWrapWidth: 500
+            });
+            playAgainLabel.position.x = 15, playAgainLabel.position.y = 10, playAgainLabel.resolution = 2, 
+            playAgainContainer.addChild(playAgainButton), playAgainContainer.addChild(playAgainLabel), 
+            TweenLite.from(playAgainContainer, .5, {
+                alpha: 0
+            }), self.endMenuContainer.addChild(playAgainContainer), playAgainContainer.position.x = windowWidth / 2 - playAgainButton.width / 2, 
+            playAgainContainer.position.y = scoreContainer ? scoreContainer.position.y + scoreContainer.height + 20 : .8 * windowHeight - playAgainContainer.height, 
+            playAgainContainer.interactive = !0, playAgainContainer.buttonMode = !0, playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData) {
+                TweenLite.to(self.endMenuContainer, 1, {
+                    x: windowWidth,
+                    y: -50,
+                    ease: "easeOutCubic",
+                    onComplete: function() {
+                        self.reset();
+                    }
+                }), self.crazyLogo.removeInterval(), self.interactiveBackground.accel = 5, TweenLite.to(self.interactiveBackground, 2, {
+                    accel: 0
+                }), APP.audioController.playSound("play");
+            };
+        }, 500), TweenLite.from(this.crazyLogo.getContent(), 4.5, {
+            delay: .4,
             x: 1.1 * windowWidth,
             y: this.crazyLogo.getContent().position.y - 50,
             ease: "easeOutElastic"
         }), TweenLite.from(this.endMenuContainer, 5, {
+            delay: .4,
             x: 1.1 * windowWidth,
             y: this.endMenuContainer.position.y - 50,
             ease: "easeOutElastic"
         }), TweenLite.to(this.interactiveBackground, 2, {
+            delay: .4,
             accel: 0
         });
     },
@@ -1396,8 +1409,7 @@ var Application = AbstractApplication.extend({
         this.layer.addChild(perfect2);
     },
     getPerfect: function() {
-        window.navigator && navigator.vibrate(200), APP.audioController.playSound("perfect"), 
-        this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], "50px Vagron");
+        APP.audioController.playSound("perfect"), this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], "50px Vagron");
         this.earthquake(40), this.levelCounter += .05 * this.levelCounterMax, this.levelCounter > this.levelCounterMax && (this.levelCounter = this.levelCounterMax);
     },
     getCoin: function(isPerfect) {
@@ -1416,9 +1428,8 @@ var Application = AbstractApplication.extend({
             onUpdate: function() {
                 self.background.clear(), self.background.beginFill(APP.backColor), self.background.drawRect(-80, -80, windowWidth + 160, windowHeight + 160);
             }
-        })), document.body.style.backgroundColor = APP.vecColorsS[APP.currentColorID], console.log(document.body.style.backgroundColor), 
-        this.player && (tempColor = addBright(temptempColor, .65), this.player.setColor(tempColor), 
-        this.loaderBar.setBackColor(tempColor));
+        })), document.body.style.backgroundColor = APP.vecColorsS[APP.currentColorID], this.player && (tempColor = addBright(temptempColor, .65), 
+        this.player.setColor(tempColor), this.loaderBar.setBackColor(tempColor));
     },
     earthquake: function(force) {
         var earth = new TimelineLite();
@@ -1480,9 +1491,7 @@ var Application = AbstractApplication.extend({
             y: 50,
             x: -windowWidth / 2,
             ease: "easeOutElastic",
-            onComplete: function() {
-                self.addCrazyMessage("HOLD AND RELEASE");
-            }
+            onComplete: function() {}
         }), TweenLite.from(this.base.position, 4, {
             y: this.base.position.y + 50,
             x: this.base.position.x - windowWidth / 2,
@@ -2058,7 +2067,7 @@ var Application = AbstractApplication.extend({
     y: window.outerHeight
 }, resizeProportional = !0, windowWidth = res.x, windowHeight = res.y, realWindowWidth = res.x, realWindowHeight = res.y, gameScale = 1, screenOrientation = "portait", windowWidthVar = window.innerWidth, windowHeightVar = window.innerHeight, gameView = document.getElementById("game");
 
-testMobile() || (document.body.className = ""), console.log(gameView);
+testMobile() || (document.body.className = "");
 
 var ratio = 1, init = !1, renderer, APP, retina = window.devicePixelRatio >= 2 ? 2 : 1, initialize = function() {
     PIXI.BaseTexture.SCALE_MODE = PIXI.scaleModes.NEAREST, requestAnimFrame(update);
@@ -2071,4 +2080,4 @@ var apps = -1 === document.URL.indexOf("http://") && -1 === document.URL.indexOf
 apps ? document.addEventListener("deviceready", deviceReady) : (res = {
     x: window.innerWidth,
     y: window.innerHeight
-}, deviceReady());
+}, setTimeout(deviceReady, 500));

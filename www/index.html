@@ -9,15 +9,27 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	
-		<!-- Include the HTML5 API files -->
+		<!-- Include the HTML5 API files
 	    <script type="text/javascript" src="http://cdn.gameplayer.io/api/js/game.js"></script>
 	    <script type="text/javascript" src="http://cdn.gameplayer.io/api/js/developer.js"></script>
-
+		 -->
     	<!-- For iOS web apps -->
 		<meta name="mobile-web-app-capable" content="yes">
 	    <meta name="apple-mobile-web-app-capable" content="yes">
 	    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 	    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui">
+
+		<meta property="og:url" content="http://jefframos.github.io/xplode-game/">
+
+	    <meta property="og:title" content="Play it!">
+		<meta property="og:site_name" content="Xplode Game">
+		<meta property="og:description" content="Try this free, funny and addictive game!">
+
+		<meta property="og:image" content="http://jefframos.github.io/xplode-game/dist/img/share.jpg">
+		<meta property="og:image:type" content="image/jpeg">
+		<meta property="og:image:width" content="800">
+		<meta property="og:image:height" content="600">
+		<meta property="og:type" content="website">
 
 		<link rel="stylesheet" href="dist/css/main.css">
 		<link rel="shortcut icon" type="image/png" href="dist/img/favicon.png"/>
@@ -49,14 +61,23 @@
 			.mobile canvas{
 				border: none;
 			}
-			@media (orientation: landscape) {
-				.mobile {
-					/*background: url(dist/img/orientation.png) center center #2c2359 no-repeat;*/
+
+			@media (max-width: 400px) {
+			  	.footer{
+					right: 5px;
+					left: 5px;
+					bottom: 5px;
+					font-size: 10px;
 				}
-				.mobile canvas {
-					display: none;
+				.donate, .copy {
+					clear: both;
+					text-align: center;
+					float: none!important;
+					display: block;
+					margin-top: 10px;
 				}
 			}
+
 			.footer{
 				position: absolute;
 				right: 15px;
@@ -67,18 +88,14 @@
 				color: white
 			}
 			.footer .copy{
-				position: absolute;
-				right: 0px;
-				bottom: 0;
+				float: right;
 			}
 			.footer a{
 				color:#555555;
 				text-decoration: none;
 			}
 			.donate{
-				position:absolute;
-				left:0px;
-				bottom: 0px;
+				float: left;
 			}
 			.donate .btn{
 				font-size: 12px;
@@ -106,7 +123,7 @@
 			</form>
 
 		</footer>
-		<script type="text/javascript" src="cordova.js"></script>
+		<!-- <script type="text/javascript" src="cordova.js"></script> -->
 		<script src="dist/js/lib/plugins.js"></script>
 		<script src="dist/js/main.js"></script>
 

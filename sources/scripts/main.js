@@ -26,7 +26,7 @@ var gameView = document.getElementById('game');
 if(!testMobile()){
 	document.body.className = '';
 }
-console.log(gameView);
+// console.log(gameView);
 
 // window.addEventListener('orientationchange', function() {
 // 	window.scrollTo(0, 0);
@@ -206,7 +206,8 @@ if ( apps ) {
 } else {
     // Web page
     res = {x:window.innerWidth, y: window.innerHeight};
-    deviceReady();
+    setTimeout(deviceReady, 500);
+    // deviceReady();
 }
 
 // document.addEventListener('deviceready', function() {

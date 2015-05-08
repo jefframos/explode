@@ -146,9 +146,6 @@ var GameScreen = AbstractScreen.extend({
 
 		this.hitTouch.touchend = this.hitTouch.mouseup = function(mouseData){
 			self.tapDown = false;
-			// self.shoot(self.force * gameScale);
-			// var sc = 667 / windowHeight;
-			// console.log((self.force / 30), windowHeight * 0.1);
 			self.shoot((self.force / 30) * windowHeight * 0.1);
 		};
 
@@ -156,6 +153,20 @@ var GameScreen = AbstractScreen.extend({
 			self.tapDown = true;
 		};
 		this.updateable = true;
+
+
+		document.body.addEventListener('keyup', function(e){
+			console.log(e.keyCode);
+			if(e.keyCode === 32 || e.keyCode === 40){
+				self.tapDown = false;
+				self.shoot((APP.force / 30) * windowHeight * 0.1);
+			}
+		});
+		document.body.addEventListener('keydown', function(e){
+			if(e.keyCode === 32 || e.keyCode === 40){
+				self.tapDown = true;
+			}
+		});
 
 
 		if(APP.withAPI){
@@ -303,6 +314,9 @@ var GameScreen = AbstractScreen.extend({
 		}
 	},
 	shoot:function(force) {
+		if(!this.player){
+			return;
+		}
 		if(this.player.inError){
 			APP.audioController.playSound('error');
 			return;
@@ -333,8 +347,9 @@ var GameScreen = AbstractScreen.extend({
 		if(this.player){
 			if(!this.player.inError){
 				if(this.tapDown && this.force < 30){
-					this.force += 0.9;
+					APP.force = this.force += 0.9;
 					this.player.charge();
+					console.log(this.force);
 					clearInterval(this.holdInterval);
 				}
 				// console.log(this.startLevel);
@@ -381,9 +396,9 @@ var GameScreen = AbstractScreen.extend({
 			this.loaderBar.getContent().alpha = 0;
 			return;
 		}
-		if(window.navigator){
-			navigator.vibrate(200);
-		}
+		// if(window.navigator){
+		// 	// navigator.vibrate(200);
+		// }
 		
 		this.hitTouch.parent.removeChild(this.hitTouch);
 		setTimeout(function(){
@@ -552,53 +567,57 @@ var GameScreen = AbstractScreen.extend({
 		}
 
 
+		setTimeout(function(){
+			var playAgainContainer = new PIXI.DisplayObjectContainer();
+			var playAgainButton = new PIXI.Graphics();
+			playAgainButton.beginFill(0xFFFFFF);
+			playAgainButton.drawRoundedRect(0,0,100, 60,5);
+			var playAgainLabel = new PIXI.Text('PLAY', {align:'center',font:'30px Vagron', fill:APP.vecColorsS[APP.currentColorID], wordWrap:true, wordWrapWidth:500});
+			playAgainLabel.position.x = 15;
+			playAgainLabel.position.y = 10;
+			playAgainLabel.resolution = 2;//retina;
+			playAgainContainer.addChild(playAgainButton);
+			playAgainContainer.addChild(playAgainLabel);
 
-		var playAgainContainer = new PIXI.DisplayObjectContainer();
-		var playAgainButton = new PIXI.Graphics();
-		playAgainButton.beginFill(0xFFFFFF);
-		playAgainButton.drawRoundedRect(0,0,100, 60,5);
-		var playAgainLabel = new PIXI.Text('PLAY', {align:'center',font:'30px Vagron', fill:APP.vecColorsS[APP.currentColorID], wordWrap:true, wordWrapWidth:500});
-		playAgainLabel.position.x = 15;
-		playAgainLabel.position.y = 10;
-		playAgainLabel.resolution = 2;//retina;
-		playAgainContainer.addChild(playAgainButton);
-		playAgainContainer.addChild(playAgainLabel);
+			TweenLite.from(playAgainContainer, 0.5, {alpha:0});
 
-		this.endMenuContainer.addChild(playAgainContainer);
-		playAgainContainer.position.x = windowWidth / 2 - playAgainButton.width / 2;
-		playAgainContainer.position.y = scoreContainer?scoreContainer.position.y + scoreContainer.height + 20:windowHeight * 0.8 - playAgainContainer.height;//windowHeight * 0.8 - playAgainContainer.height;
+			self.endMenuContainer.addChild(playAgainContainer);
+			playAgainContainer.position.x = windowWidth / 2 - playAgainButton.width / 2;
+			playAgainContainer.position.y = scoreContainer?scoreContainer.position.y + scoreContainer.height + 20:windowHeight * 0.8 - playAgainContainer.height;//windowHeight * 0.8 - playAgainContainer.height;
 
-		// playAgainContainer = new PIXI.DisplayObjectContainer();
+			// playAgainContainer = new PIXI.DisplayObjectContainer();
 
-		playAgainContainer.interactive = true;
-		playAgainContainer.buttonMode = true;
+			playAgainContainer.interactive = true;
+			playAgainContainer.buttonMode = true;
 
-		// playAgainContainer.touchend = playAgainContainer.mouseup = function(mouseData){
-		playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData){
-			TweenLite.to(self.endMenuContainer, 1, {x: windowWidth, y: - 50, ease:'easeOutCubic', onComplete:function(){
-				self.reset();
-			}});
+			// playAgainContainer.touchend = playAgainContainer.mouseup = function(mouseData){
+			playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData){
+				TweenLite.to(self.endMenuContainer, 1, {x: windowWidth, y: - 50, ease:'easeOutCubic', onComplete:function(){
+					self.reset();
+				}});
 
 
 
-			self.crazyLogo.removeInterval();
-			// TweenLite.to(self.crazyLogo.getContent(), 1, {x: windowWidth, y: windowHeight * 0.2 - 50, ease:'easeOutCubic', onComplete:function(){
-			// 	// self.reset();
-			// }});
+				self.crazyLogo.removeInterval();
+				// TweenLite.to(self.crazyLogo.getContent(), 1, {x: windowWidth, y: windowHeight * 0.2 - 50, ease:'easeOutCubic', onComplete:function(){
+				// 	// self.reset();
+				// }});
 
-			self.interactiveBackground.accel = 5;
-			// self.interactiveBackground.gravity = -5;
-			TweenLite.to(self.interactiveBackground, 2, {accel:0});
+				self.interactiveBackground.accel = 5;
+				// self.interactiveBackground.gravity = -5;
+				TweenLite.to(self.interactiveBackground, 2, {accel:0});
 
-			APP.audioController.playSound('play');
-			// TweenLite.to(self.interactiveBackground, 2, {gravity:0});
-		};
+				APP.audioController.playSound('play');
+				// TweenLite.to(self.interactiveBackground, 2, {gravity:0});
+			};
+		}, 500);
+		
 
 		
-		TweenLite.from(this.crazyLogo.getContent(), 4.5, {x: windowWidth * 1.1, y:this.crazyLogo.getContent().position.y - 50, ease:'easeOutElastic'});
+		TweenLite.from(this.crazyLogo.getContent(), 4.5, {delay:0.4, x: windowWidth * 1.1, y:this.crazyLogo.getContent().position.y - 50, ease:'easeOutElastic'});
 
-		TweenLite.from(this.endMenuContainer, 5, {x: windowWidth * 1.1, y:this.endMenuContainer.position.y - 50, ease:'easeOutElastic'});
-		TweenLite.to(this.interactiveBackground, 2, {accel:0});
+		TweenLite.from(this.endMenuContainer, 5, {delay:0.4, x: windowWidth * 1.1, y:this.endMenuContainer.position.y - 50, ease:'easeOutElastic'});
+		TweenLite.to(this.interactiveBackground, 2, {delay:0.4, accel:0});
 	},
 	addRegularLabel:function(label, font, initY){
 		var rot = Math.random() * 0.004;
@@ -630,11 +649,11 @@ var GameScreen = AbstractScreen.extend({
 		// }
 	},
 	getPerfect:function(){
-		if(window.navigator){
-			navigator.vibrate(200);
-		}
+		//if(window.navigator){
+			// navigator.vibrate(200);
+		//}
 		APP.audioController.playSound('perfect');
-		// navigator.vibrate(200);
+		//navigator.vibrate(200);
 		this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], '50px Vagron');
 		var self = this;
 		// setTimeout(function(){
@@ -687,7 +706,7 @@ var GameScreen = AbstractScreen.extend({
 			}});
 		}
 		document.body.style.backgroundColor = APP.vecColorsS[APP.currentColorID];
-		console.log(document.body.style.backgroundColor);
+		// console.log(document.body.style.backgroundColor);
 		if(!this.player){
 			return;
 		}
@@ -762,12 +781,12 @@ var GameScreen = AbstractScreen.extend({
 		var self = this;
 		this.addChild(self.hitTouch);
 		TweenLite.from(this.layer.getContent().position, 3.5, {y:50, x:-windowWidth / 2, ease:'easeOutElastic', onComplete:function(){
-			self.addCrazyMessage('HOLD AND RELEASE');
+			//self.addCrazyMessage('HOLD AND RELEASE');
 		}});
 
 		// this.coinsLabel.position.x = windowWidth / 2 - this.coinsLabel.width / 2 / this.coinsLabel.resolution;
 		// this.coinsLabel.position.y = windowHeight / 2 - this.coinsLabel.height / 2 / this.coinsLabel.resolution;
-// this.base.position.y = windowHeight + this.player.spriteBall.height / 2;
+		// this.base.position.y = windowHeight + this.player.spriteBall.height / 2;
 		TweenLite.from(this.base.position, 4, {y:this.base.position.y+50, x:this.base.position.x-windowWidth / 2, ease:'easeOutElastic'});
 		
 		TweenLite.from(this.coinsLabel.position, 4, {y:this.coinsLabel.position.y+50, x:this.coinsLabel.position.x-windowWidth / 2, ease:'easeOutElastic', onComplete:function(){
