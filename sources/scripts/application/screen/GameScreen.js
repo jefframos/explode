@@ -12,6 +12,8 @@ var GameScreen = AbstractScreen.extend({
 			APP.highscore = 0;
 		}
 
+
+		APP.audioController.playAmbientSound('loop');
 		// APP.vecColors = [0xD031F2,0xFF562D,0x9E1EE8,0x5AF271];
   //       APP.vecColorsS = ['#D031F2','#FF562D','#9E1EE8','#5AF271'];
   //       APP.vecPerfects = ['PERFECT!', 'AWESOME!', 'AMAZING!', 'GOD!!!'];
@@ -37,6 +39,7 @@ var GameScreen = AbstractScreen.extend({
 		}
 		this.pinVel = {x:0, y:0};
 		console.log('buid');
+		this.addSoundButton();
 	},
 	onProgress:function(){
 		this._super();
@@ -44,6 +47,64 @@ var GameScreen = AbstractScreen.extend({
 	onAssetsLoaded:function()
 	{
 		this.initApplication();
+	},
+	addSoundButton:function(){
+		this.soundButtonContainer = new PIXI.DisplayObjectContainer();
+		this.soundOn = new PIXI.Graphics();
+		this.soundOn.beginFill(0xFFFFFF);
+		this.soundOn.moveTo(10,0);
+		this.soundOn.lineTo(0,0);
+		this.soundOn.lineTo(0,20);
+		this.soundOn.lineTo(10,20);
+
+		this.soundOn.moveTo(15,20);
+		this.soundOn.lineTo(25,20);
+		this.soundOn.lineTo(25,0);
+		this.soundOn.lineTo(15,0);
+
+		this.soundOff = new PIXI.Graphics();
+		this.soundOff.beginFill(0xFFFFFF);
+		this.soundOff.moveTo(15 + 5,10);
+		this.soundOff.lineTo(0 + 5,0);
+		this.soundOff.lineTo(0 + 5,20);
+		
+		if(APP.mute){
+			this.soundButtonContainer.addChild(this.soundOff);
+		}else{
+			this.soundButtonContainer.addChild(this.soundOn);
+		}
+
+		this.addChild(this.soundButtonContainer);
+		this.soundButtonContainer.position.x = windowWidth - this.soundButtonContainer.width *1.5;
+		this.soundButtonContainer.position.y = this.soundButtonContainer.width;
+		// alert(this.soundButtonContainer.width/2);
+		// this.soundButtonContainer = new PIXI.DisplayObjectContainer();
+		this.soundButtonContainer.hitArea = new PIXI.Rectangle(-5, -5, 35, 35);
+		this.soundButtonContainer.interactive = true;
+
+		// this.soundButtonContainer.touchend = this.soundButtonContainer.mouseup = function(mouseData){
+		var self = this;
+		this.soundButtonContainer.touchstart = this.soundButtonContainer.mousedown = function(mouseData){
+
+			if(APP.mute){
+				APP.mute = false;
+				Howler.unmute();
+			}else{
+				APP.mute = true;
+				Howler.mute();
+			}
+			if(self.soundOff.parent){
+				self.soundOff.parent.removeChild(self.soundOff);
+			}
+			if(self.soundOn.parent){
+				self.soundOn.parent.removeChild(self.soundOn);
+			}
+			if(APP.mute){
+				self.soundButtonContainer.addChild(self.soundOff);
+			}else{
+				self.soundButtonContainer.addChild(self.soundOn);
+			}
+		};
 	},
 	initApplication:function(){
 		
@@ -95,39 +156,6 @@ var GameScreen = AbstractScreen.extend({
 		};
 		this.updateable = true;
 
-
-
-		// this.pauseButton = new DefaultButton('UI_button_default_1.png', 'UI_button_default_1.png', 'UI_button_default_1.png');
-		// this.pauseButton.build();
-		// scaleConverter(this.pauseButton.getContent().width, windowWidth, 0.1, this.pauseButton);
-		// this.pauseButton.setPosition(20,20);
-		// // this.addChild(this.pauseButton);
-	  
-		// this.pauseButton.clickCallback = function(){
-		// 	self.pauseModal.show();
-		// };
-
-		// this.backButton = new DefaultButton('UI_button_default_1.png', 'UI_button_default_1.png');
-		// this.backButton.build();
-		// this.backButton.addLabel(new PIXI.Text('BACK', {font:'50px Vagron', fill:'#FFFFFF'}), 40);
-		// scaleConverter(this.backButton.getContent().width, windowWidth, 0.4, this.backButton);
-		// this.backButton.setPosition(windowWidth / 2 - this.backButton.getContent().width/2,
-		// 	windowHeight - this.backButton.getContent().height * 2.5);
-		// // this.addChild(this.backButton);
-	  
-		// this.backButton.clickCallback = function(){
-		// 	self.updateable = false;
-		// 	self.toTween(function(){
-		// 		self.screenManager.change('Init');
-		// 	});
-		// };
-
-		// this.setAudioButtons();
-		
-
-		//MODAIS
-		// this.pauseModal = new PauseModal(this);
-		// this.endModal = new EndModal(this);
 
 		if(APP.withAPI){
 			GameAPI.GameBreak.request(function(){
@@ -183,6 +211,7 @@ var GameScreen = AbstractScreen.extend({
 		if(!this.fistTime){
 			this.changeColor(true, true);
 			this.openEndMenu();
+
 			this.fistTime = true;
 		}else{
 			this.initLevel();
@@ -285,6 +314,9 @@ var GameScreen = AbstractScreen.extend({
 		// TweenLite.to(this.crazyContent, 0.2, {alpha:0});
 		TweenLite.to(this.loaderBar.getContent(), 0.2, {delay:0.2, alpha:1});
 
+		var ls = Math.floor(Math.random() * 4) + 1;
+		APP.audioController.playSound('laser'+ls);
+
 		this.addCrazyMessage('HOLD');
 	},
 	reset:function(){
@@ -351,7 +383,9 @@ var GameScreen = AbstractScreen.extend({
 		}
 		
 		this.hitTouch.parent.removeChild(this.hitTouch);
-		this.player.preKill();
+		setTimeout(function(){
+			self.player.preKill();
+		}, 100);
 		this.targetJump.preKill();
 		this.base.parent.removeChild(this.base);
 		this.earthquake(40);
@@ -365,13 +399,14 @@ var GameScreen = AbstractScreen.extend({
 		var self = this;
 		setTimeout(function(){
 			self.openEndMenu();
+			APP.audioController.playSound('wub');
 		}, 1000);
 		// this.reset();
 	},
 	openEndMenu:function(){
 
 		var self = this;
-
+		
 
 		this.endMenuContainer = new PIXI.DisplayObjectContainer();
 		this.container.addChild(this.endMenuContainer);
@@ -540,6 +575,8 @@ var GameScreen = AbstractScreen.extend({
 			self.interactiveBackground.accel = 5;
 			// self.interactiveBackground.gravity = -5;
 			TweenLite.to(self.interactiveBackground, 2, {accel:0});
+
+			APP.audioController.playSound('play');
 			// TweenLite.to(self.interactiveBackground, 2, {gravity:0});
 		};
 
@@ -582,8 +619,13 @@ var GameScreen = AbstractScreen.extend({
 		if(window.navigator){
 			navigator.vibrate(200);
 		}
+		APP.audioController.playSound('perfect');
 		// navigator.vibrate(200);
 		this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], '50px Vagron');
+		var self = this;
+		// setTimeout(function(){
+		// 	self.addRegularLabel('COMBO!', '50px Vagron');
+		// }, 300);
 		this.earthquake(40);
 		this.levelCounter += this.levelCounterMax * 0.05;
 		if(this.levelCounter > this.levelCounterMax){

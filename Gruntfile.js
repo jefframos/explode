@@ -46,13 +46,8 @@ module.exports = function(grunt) {
                 src: [
                     // '<%= globalConfig.src %>scripts/plugins/r.js',
                     '<%= globalConfig.src %>scripts/plugins/howler.js',
-                    '<%= globalConfig.src %>scripts/plugins/fpsmeter.js',
                     '<%= globalConfig.src %>scripts/plugins/pixi.js',
                     '<%= globalConfig.src %>scripts/plugins/modernizr-2.7.1.min.js',
-                    '<%= globalConfig.src %>scripts/plugins/hideAddressbar.min.js',
-                    '<%= globalConfig.src %>scripts/plugins/soundmanager2-nodebug-jsmin.js',
-                    '<%= globalConfig.src %>scripts/plugins/jquery-1.11.2.min',
-                    '<%= globalConfig.src %>scripts/plugins/hammer.min.js',
                     '<%= globalConfig.src %>scripts/plugins/class.js',
                     // '<%= globalConfig.src %>scripts/plugins/SocialSharing.js',
                     '<%= globalConfig.src %>scripts/plugins/easegame/**/*.js'

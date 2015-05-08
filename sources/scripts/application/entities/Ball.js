@@ -123,7 +123,11 @@ var Ball = Entity.extend({
 
 		if(this.getContent().position.y + this.velocity.y >= this.floorPos + this.maxSize){//} + this.spriteBall.height / 2){
 			if(this.firstJump){
-				this.screen.addCrazyMessage('RELEASE');
+				if(this.screen.force > 0.5){
+					this.screen.addCrazyMessage('RELEASE');
+				}else{
+					this.screen.addCrazyMessage('HOLD!');
+				}
 				
 			}
 			this.getContent().position.y = this.floorPos + this.maxSize;// + this.spriteBall.height / 2;
@@ -135,6 +139,7 @@ var Ball = Entity.extend({
 			this.force = 0;
 			if(this.inJump){
 				this.explode();
+				APP.audioController.playSound('fall');
 				this.inJump = false;
 			}
 		}else if(this.breakJump||this.velocity.y !==0){
@@ -238,7 +243,7 @@ var Ball = Entity.extend({
 					var value = 1 + this.perfectShootAcum;
 					APP.points += value;
 
-
+					APP.audioController.playSound('explode1');
 
 					var rot = Math.random() * 0.005;
 					var tempLabel = new PIXI.Text('+'+value, {font:'50px Vagron', fill:'#13c2b6'});
@@ -300,7 +305,7 @@ var Ball = Entity.extend({
 		var vel = 2;
 		var vecVel = {x: Math.sin(vector) * vel, y: Math.cos(vector) * vel};
 
-		console.log('charge');
+		// console.log('charge');
 		var tempPart = new PIXI.Graphics();
 		tempPart.beginFill(this.color);
 		tempPart.drawCircle(0,0,windowHeight * 0.05);
@@ -342,6 +347,7 @@ var Ball = Entity.extend({
 		if(this.invencible){
 			return;
 		}
+		APP.audioController.playSound('explode1');
 		this.collidable = false;
 		this.kill = true;
 		for (var i = 10; i >= 0; i--) {

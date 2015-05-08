@@ -9,9 +9,9 @@ var Application = AbstractApplication.extend({
 
         this.vecColors = [0xFF7BD6,0xFF5C6A,0xFF8668,0xFCBE55,0x54E5D5,0x2A78FF,0x9248F9,0xD751ED, 0x93BF41];
         this.vecColorsS = ['#FF7BD6','#FF5C6A','#FF8668','#FCBE55','#54E5D5','#2A78FF','#9248F9','#D751ED', '#93BF41'];
-        this.vecPerfects = ['PERFECT!', 'AWESOME!', 'AMAZING!', 'GOD!!!', 'WOWOWOW', 'YEAHAhah'];
+        this.vecPerfects = ['PERFECT!', 'AWESOME!', 'AMAZING!', 'GOD!!!', 'WOWOWOW', 'YEAH!'];
         this.vecGood = ['GOOD', 'COOL', 'YEP', 'NOT BAD'];
-        this.vecError = ['NOOOO!', 'BAD', 'MISS!', 'NOT', 'AHHhh'];
+        this.vecError = ['NOOOO!', 'BAD', 'MISS!', 'NOT', 'AHHHH'];
         this.currentColorID = Math.floor(this.vecColors.length * Math.random());
 
         this.backColor = this.vecColors[this.currentColorID];
@@ -29,7 +29,7 @@ var Application = AbstractApplication.extend({
             self.initialized = true;
             // self.mute = false;
 
-            // self.audioController = new AudioController();
+            self.audioController = new AudioController();
 
             self.withAPI = false;
             if(window.location.hash === '#withoutAPI'){
@@ -38,13 +38,9 @@ var Application = AbstractApplication.extend({
 
             // self.build();
         }
-        // if(window.intel !== undefined){
-        //     document.addEventListener('deviceready', function() {
-        //         initialize();
-        //     });
-        // }else{
-        // }
         initialize();
+
+        this.mute = false;
 
         
 	},
