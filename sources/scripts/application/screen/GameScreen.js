@@ -81,6 +81,7 @@ var GameScreen = AbstractScreen.extend({
 		// this.soundButtonContainer = new PIXI.DisplayObjectContainer();
 		this.soundButtonContainer.hitArea = new PIXI.Rectangle(-5, -5, 35, 35);
 		this.soundButtonContainer.interactive = true;
+		this.soundButtonContainer.buttonMode = true;
 
 		// this.soundButtonContainer.touchend = this.soundButtonContainer.mouseup = function(mouseData){
 		var self = this;
@@ -506,6 +507,7 @@ var GameScreen = AbstractScreen.extend({
 			// twContainer = new PIXI.DisplayObjectContainer();
 
 			twContainer.interactive = true;
+			twContainer.buttonMode = true;
 
 			// twContainer.touchend = twContainer.mouseup = function(mouseData){
 			twContainer.touchstart = twContainer.mousedown = function(mouseData){
@@ -531,6 +533,7 @@ var GameScreen = AbstractScreen.extend({
 			// fbContainer = new PIXI.DisplayObjectContainer();
 
 			fbContainer.interactive = true;
+			fbContainer.buttonMode = true;
 
 			// fbContainer.touchend = fbContainer.mouseup = function(mouseData){
 			fbContainer.touchstart = fbContainer.mousedown = function(mouseData){
@@ -558,6 +561,7 @@ var GameScreen = AbstractScreen.extend({
 		// playAgainContainer = new PIXI.DisplayObjectContainer();
 
 		playAgainContainer.interactive = true;
+		playAgainContainer.buttonMode = true;
 
 		// playAgainContainer.touchend = playAgainContainer.mouseup = function(mouseData){
 		playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData){
@@ -763,8 +767,13 @@ var GameScreen = AbstractScreen.extend({
 		// TweenLite.from(this.targetJump.getContent().position, 0.5, {delay:0.4, y:-100});
 		// TweenLite.to(this.crazyContent, 0.5, {delay:1, alpha:1});
 
+		this.holdIntervalCounter = 0;
 		this.holdInterval = setInterval(function(){
 			self.addRegularLabel('HOLD!', '50px Vagron', windowHeight / 2);
+			self.holdIntervalCounter ++;
+			if(self.holdIntervalCounter > 5){
+				clearInterval(self.holdInterval);
+			}
 		}, 1000);
 
 		this.force = 0;

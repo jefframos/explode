@@ -1096,7 +1096,7 @@ var Application = AbstractApplication.extend({
         this.soundOff.lineTo(5, 0), this.soundOff.lineTo(5, 20), this.soundButtonContainer.addChild(APP.mute ? this.soundOff : this.soundOn), 
         this.addChild(this.soundButtonContainer), this.soundButtonContainer.position.x = windowWidth - 1.5 * this.soundButtonContainer.width, 
         this.soundButtonContainer.position.y = this.soundButtonContainer.width, this.soundButtonContainer.hitArea = new PIXI.Rectangle(-5, -5, 35, 35), 
-        this.soundButtonContainer.interactive = !0;
+        this.soundButtonContainer.interactive = !0, this.soundButtonContainer.buttonMode = !0;
         var self = this;
         this.soundButtonContainer.touchstart = this.soundButtonContainer.mousedown = function(mouseData) {
             APP.mute ? (APP.mute = !1, Howler.unmute()) : (APP.mute = !0, Howler.mute()), self.soundOff.parent && self.soundOff.parent.removeChild(self.soundOff), 
@@ -1313,7 +1313,8 @@ var Application = AbstractApplication.extend({
             });
             twLabel.position.x = 29, twLabel.position.y = 3, twLabel.resolution = 2, twContainer.addChild(twButton), 
             twContainer.addChild(twLabel), scoreContainer.addChild(twContainer), twContainer.position.x = scoreBack.width / 2 - twButton.width / 2, 
-            twContainer.position.y = 166, twContainer.interactive = !0, twContainer.touchstart = twContainer.mousedown = function(mouseData) {};
+            twContainer.position.y = 166, twContainer.interactive = !0, twContainer.buttonMode = !0, 
+            twContainer.touchstart = twContainer.mousedown = function(mouseData) {};
             var fbContainer = new PIXI.DisplayObjectContainer(), fbButton = new PIXI.Graphics();
             fbButton.beginFill(3889560), fbButton.drawRoundedRect(0, 0, 120, 30, 5);
             var fbLabel = new PIXI.Text("Facebook", {
@@ -1325,7 +1326,8 @@ var Application = AbstractApplication.extend({
             });
             fbLabel.position.x = 17, fbLabel.position.y = 3, fbLabel.resolution = 2, fbContainer.addChild(fbButton), 
             fbContainer.addChild(fbLabel), scoreContainer.addChild(fbContainer), fbContainer.position.x = scoreBack.width / 2 - fbButton.width / 2, 
-            fbContainer.position.y = 204, fbContainer.interactive = !0, fbContainer.touchstart = fbContainer.mousedown = function(mouseData) {};
+            fbContainer.position.y = 204, fbContainer.interactive = !0, fbContainer.buttonMode = !0, 
+            fbContainer.touchstart = fbContainer.mousedown = function(mouseData) {};
         }
         var playAgainContainer = new PIXI.DisplayObjectContainer(), playAgainButton = new PIXI.Graphics();
         playAgainButton.beginFill(16777215), playAgainButton.drawRoundedRect(0, 0, 100, 60, 5);
@@ -1340,7 +1342,7 @@ var Application = AbstractApplication.extend({
         playAgainContainer.addChild(playAgainButton), playAgainContainer.addChild(playAgainLabel), 
         this.endMenuContainer.addChild(playAgainContainer), playAgainContainer.position.x = windowWidth / 2 - playAgainButton.width / 2, 
         playAgainContainer.position.y = scoreContainer ? scoreContainer.position.y + scoreContainer.height + 20 : .8 * windowHeight - playAgainContainer.height, 
-        playAgainContainer.interactive = !0, playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData) {
+        playAgainContainer.interactive = !0, playAgainContainer.buttonMode = !0, playAgainContainer.touchstart = playAgainContainer.mousedown = function(mouseData) {
             TweenLite.to(self.endMenuContainer, 1, {
                 x: windowWidth,
                 y: -50,
@@ -1482,8 +1484,9 @@ var Application = AbstractApplication.extend({
             x: this.coinsLabel.position.x - windowWidth / 2,
             ease: "easeOutElastic",
             onComplete: function() {}
-        }), this.holdInterval = setInterval(function() {
-            self.addRegularLabel("HOLD!", "50px Vagron", windowHeight / 2);
+        }), this.holdIntervalCounter = 0, this.holdInterval = setInterval(function() {
+            self.addRegularLabel("HOLD!", "50px Vagron", windowHeight / 2), self.holdIntervalCounter++, 
+            self.holdIntervalCounter > 5 && clearInterval(self.holdInterval);
         }, 1e3), this.force = 0, this.levelCounter = 800, this.levelCounterMax = 800, this.changeColor(!0, !0), 
         this.endGame = !1, this.crazyLogo && (this.crazyLogo.updateable = !1);
     },
