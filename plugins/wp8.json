@@ -5,20 +5,6 @@
     },
     "config_munge": {
         "files": {
-            "config.xml": {
-                "parents": {
-                    "/*": [
-                        {
-                            "xml": "<feature name=\"Vibration\"><param name=\"wp-package\" value=\"Vibration\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"AdMob\"><param name=\"wp-package\" value=\"AdMob\" /></feature>",
-                            "count": 1
-                        }
-                    ]
-                }
-            },
             "Properties/WMAppManifest.xml": {
                 "parents": {
                     "/Deployment/App/Capabilities": [
@@ -28,23 +14,36 @@
                         }
                     ]
                 }
+            },
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"AdMob\"><param name=\"wp-package\" value=\"AdMob\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"wp-package\" value=\"Vibration\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
             }
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "{e1901190-f533-11e4-bcf3-47e6f7ecab80}"
-        },
-        "org.apache.cordova.vibration": {
-            "PACKAGE_NAME": "{e1901190-f533-11e4-bcf3-47e6f7ecab80}"
+        "com.google.admobsdk": {
+            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
         },
         "com.rjfun.cordova.plugin.admob": {
-            "PACKAGE_NAME": "{e1901190-f533-11e4-bcf3-47e6f7ecab80}"
+            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
+        },
+        "org.apache.cordova.vibration": {
+            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
         }
     },
-    "dependent_plugins": {
-        "com.google.admobsdk": {
-            "PACKAGE_NAME": "{e1901190-f533-11e4-bcf3-47e6f7ecab80}"
-        }
-    }
+    "dependent_plugins": {}
 }
