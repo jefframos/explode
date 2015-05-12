@@ -1,18 +1,24 @@
 /*jshint undef:false */
 var AudioController = Class.extend({
 	init:function(){
-
+		// alert(window.location.pathname);
+		// var media = new Media('sounds/loop.mp3', function(){
+		// 	alert('success');
+		// }, function(error){
+		// 	alert(error.message);
+		// });
+		// media.play();
 		this.audioList = [
 			{
 				label:'loop',
-				urls: ['dist/audio/loop.mp3'],
+				urls: ['www/dist/audio/loop.mp3','sounds/loop.mp3','dist/audio/wub.ogg'],
 				// urls: ['dist/audio/star.mp3'],
 				volume: 0.1,
 				loop: true
 			},
 			{
 				label:'wub',
-				urls: ['dist/audio/wub.mp3'],
+				urls: ['dist/audio/wub.mp3','dist/audio/wub.ogg'],
 				volume: 0.2,
 				loop: false
 			},
@@ -75,11 +81,15 @@ var AudioController = Class.extend({
 		this.loadedAudioComplete = false;
 		this.audios = [];
 		var self = this;
+		function loadError(error){
+			// alert(error.message);
+		}
 		function end(){
 			// console.log('end');
 			self.updateAudioList(this);
 		}
 		function load(){
+			// alert('load');
 			self.currentLoaded ++;
 			// console.log(self.currentLoaded);
 			if(self.currentLoaded >= self.audioList.length){
@@ -100,7 +110,8 @@ var AudioController = Class.extend({
 					// sprite: this.audioList[i].sprite?this.audioList[i].sprite:null,
 					loop: this.audioList[i].loop,
 					onend: end,
-					onload: load
+					onload: load,
+					onloaderror: loadError
 				})
 			};
 			// console.log(this.audioList[i].loop,'audio');
@@ -152,7 +163,8 @@ var AudioController = Class.extend({
 				this.playingAudios.push(audioP);
 			}
 		}
-		// console.log(audioP);
+		// alert(audioP);
+		console.log(audioP);
 		return audioP;
 	},
 	stopSound:function(id){

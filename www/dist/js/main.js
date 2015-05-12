@@ -1,4 +1,4 @@
-/*! jefframos 08-05-2015 */
+/*! jefframos 12-05-2015 */
 function rgbToHsl(r, g, b) {
     r /= 255, g /= 255, b /= 255;
     var h, s, max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2;
@@ -321,6 +321,7 @@ var Application = AbstractApplication.extend({
     }
 }), AudioController = Class.extend({
     init: function() {
+        function loadError(error) {}
         function end() {
             self.updateAudioList(this);
         }
@@ -330,12 +331,12 @@ var Application = AbstractApplication.extend({
         }
         this.audioList = [ {
             label: "loop",
-            urls: [ "dist/audio/loop.mp3" ],
+            urls: [ "www/dist/audio/loop.mp3", "sounds/loop.mp3", "dist/audio/wub.ogg" ],
             volume: .1,
             loop: !0
         }, {
             label: "wub",
-            urls: [ "dist/audio/wub.mp3" ],
+            urls: [ "dist/audio/wub.mp3", "dist/audio/wub.ogg" ],
             volume: .2,
             loop: !1
         }, {
@@ -392,7 +393,8 @@ var Application = AbstractApplication.extend({
                     volume: this.audioList[i].volume,
                     loop: this.audioList[i].loop,
                     onend: end,
-                    onload: load
+                    onload: load,
+                    onloaderror: loadError
                 })
             };
             this.audioList[i].loop || (tempObj.audio.onend = end), this.audios.push(tempObj);
@@ -406,7 +408,7 @@ var Application = AbstractApplication.extend({
     playSound: function(id) {
         for (var audioP = null, i = this.audios.length - 1; i >= 0; i--) this.audios[i].label === id && (audioP = this.audios[i].audio, 
         audioP.play(), this.playingAudios.push(audioP));
-        return audioP;
+        return console.log(audioP), audioP;
     },
     stopSound: function(id) {
         for (var audioP = null, i = this.audios.length - 1; i >= 0; i--) if (this.audios[i].label === id) {
@@ -462,7 +464,7 @@ var Application = AbstractApplication.extend({
     },
     jump: function(force) {
         return this.breakJump ? void this.screen.miss() : (this.gravity = 0, this.velocity.y = -force - this.gravityVal * this.gravityVal / 1.5 * 10, 
-        console.log(this.velocity.y, this.gravityVal), this.firstJump = !0, void (this.inJump = !0));
+        this.firstJump = !0, void (this.inJump = !0));
     },
     improveGravity: function() {
         this.gravityVal >= 1.2 || (this.gravityVal += .05);
@@ -615,9 +617,8 @@ var Application = AbstractApplication.extend({
     explode: function(velX, velY) {
         var particle = null, tempParticle = null;
         this.size = 8;
-        for (var i = 10; i >= 0; i--) console.log("part"), tempParticle = new PIXI.Graphics(), 
-        tempParticle.beginFill(16777215), tempParticle.drawRect(-this.size / 2, -this.size / 2, this.size, this.size), 
-        particle = new Particles({
+        for (var i = 10; i >= 0; i--) tempParticle = new PIXI.Graphics(), tempParticle.beginFill(16777215), 
+        tempParticle.drawRect(-this.size / 2, -this.size / 2, this.size, this.size), particle = new Particles({
             x: 10 * Math.random() - 5 + (velX ? velX : 0),
             y: 10 * Math.random() - 5 + (velY ? velY : 0)
         }, 600, tempParticle, .05 * Math.random()), particle.build(), particle.alphadecress = .008, 
@@ -1122,8 +1123,7 @@ var Application = AbstractApplication.extend({
         }, this.hitTouch.touchstart = this.hitTouch.mousedown = function(touchData) {
             self.tapDown = !0;
         }, this.updateable = !0, document.body.addEventListener("keyup", function(e) {
-            console.log(e.keyCode), (32 === e.keyCode || 40 === e.keyCode) && (self.tapDown = !1, 
-            self.shoot(APP.force / 30 * windowHeight * .1));
+            (32 === e.keyCode || 40 === e.keyCode) && (self.tapDown = !1, self.shoot(APP.force / 30 * windowHeight * .1));
         }), document.body.addEventListener("keydown", function(e) {
             (32 === e.keyCode || 40 === e.keyCode) && (self.tapDown = !0);
         }), APP.withAPI && GameAPI.GameBreak.request(function() {
@@ -1229,9 +1229,9 @@ var Application = AbstractApplication.extend({
     },
     update: function() {
         this.updateable && (this.player ? (this.player.inError || (this.tapDown && this.force < 30 && (APP.force = this.force += .9, 
-        this.player.charge(), console.log(this.force), clearInterval(this.holdInterval)), 
-        this.startLevel && (this.levelCounter--, this.levelCounter < 0 && (this.levelCounter = 0))), 
-        this.player.force = this.force, this.player.velocity.y < 0 ? this.interactiveBackground.gravity = Math.abs(this.player.velocity.y) / 15 : this.interactiveBackground.gravity = 0, 
+        this.player.charge(), clearInterval(this.holdInterval)), this.startLevel && (this.levelCounter--, 
+        this.levelCounter < 0 && (this.levelCounter = 0))), this.player.force = this.force, 
+        this.player.velocity.y < 0 ? this.interactiveBackground.gravity = Math.abs(this.player.velocity.y) / 15 : this.interactiveBackground.gravity = 0, 
         this.levelCounter <= 0 && this.gameOver(), this.loaderBar.updateBar(this.levelCounter, this.levelCounterMax)) : this.interactiveBackground.gravity = 1, 
         this.crazyLogo && this.crazyLogo.update(), this.base && (this.base.side || (this.base.side = 1), 
         this.base.alpha += .01 * this.base.side, (this.base.alpha > .5 || this.base.alpha <= .1) && (this.base.side *= -1)), 
@@ -1240,7 +1240,8 @@ var Application = AbstractApplication.extend({
     gameOver: function() {
         if (this.endGame) return this.crazyContent.alpha = 0, this.coinsLabel.alpha = 0, 
         void (this.loaderBar.getContent().alpha = 0);
-        this.hitTouch.parent.removeChild(this.hitTouch), setTimeout(function() {
+        window.navigator && navigator.vibrate(200), this.hitTouch.parent.removeChild(this.hitTouch), 
+        setTimeout(function() {
             self.player.preKill();
         }, 100), this.targetJump.preKill(), this.base.parent.removeChild(this.base), this.earthquake(40), 
         this.endGame = !0, this.crazyContent.alpha = 0, this.coinsLabel.alpha = 0, this.loaderBar.getContent().alpha = 0, 
@@ -1409,7 +1410,8 @@ var Application = AbstractApplication.extend({
         this.layer.addChild(perfect2);
     },
     getPerfect: function() {
-        APP.audioController.playSound("perfect"), this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], "50px Vagron");
+        window.navigator && navigator.vibrate(200), APP.audioController.playSound("perfect"), 
+        this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], "50px Vagron");
         this.earthquake(40), this.levelCounter += .05 * this.levelCounterMax, this.levelCounter > this.levelCounterMax && (this.levelCounter = this.levelCounterMax);
     },
     getCoin: function(isPerfect) {
@@ -2071,11 +2073,7 @@ testMobile() || (document.body.className = "");
 
 var ratio = 1, init = !1, renderer, APP, retina = window.devicePixelRatio >= 2 ? 2 : 1, initialize = function() {
     PIXI.BaseTexture.SCALE_MODE = PIXI.scaleModes.NEAREST, requestAnimFrame(update);
-}, isfull = !1;
-
-window.console.log = function() {};
-
-var apps = -1 === document.URL.indexOf("http://") && -1 === document.URL.indexOf("https://");
+}, isfull = !1, apps = -1 === document.URL.indexOf("http://") && -1 === document.URL.indexOf("https://");
 
 apps ? document.addEventListener("deviceready", deviceReady) : (res = {
     x: window.innerWidth,

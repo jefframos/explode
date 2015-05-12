@@ -156,7 +156,7 @@ var GameScreen = AbstractScreen.extend({
 
 
 		document.body.addEventListener('keyup', function(e){
-			console.log(e.keyCode);
+			// console.log(e.keyCode);
 			if(e.keyCode === 32 || e.keyCode === 40){
 				self.tapDown = false;
 				self.shoot((APP.force / 30) * windowHeight * 0.1);
@@ -349,7 +349,7 @@ var GameScreen = AbstractScreen.extend({
 				if(this.tapDown && this.force < 30){
 					APP.force = this.force += 0.9;
 					this.player.charge();
-					console.log(this.force);
+					// console.log(this.force);
 					clearInterval(this.holdInterval);
 				}
 				// console.log(this.startLevel);
@@ -396,9 +396,9 @@ var GameScreen = AbstractScreen.extend({
 			this.loaderBar.getContent().alpha = 0;
 			return;
 		}
-		// if(window.navigator){
-		// 	// navigator.vibrate(200);
-		// }
+		if(window.navigator){
+			navigator.vibrate(200);
+		}
 		
 		this.hitTouch.parent.removeChild(this.hitTouch);
 		setTimeout(function(){
@@ -649,9 +649,9 @@ var GameScreen = AbstractScreen.extend({
 		// }
 	},
 	getPerfect:function(){
-		//if(window.navigator){
-			// navigator.vibrate(200);
-		//}
+		if(window.navigator){
+			navigator.vibrate(200);
+		}
 		APP.audioController.playSound('perfect');
 		//navigator.vibrate(200);
 		this.addRegularLabel(APP.vecPerfects[Math.floor(APP.vecPerfects.length * Math.random())], '50px Vagron');

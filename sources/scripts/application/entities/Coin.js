@@ -75,7 +75,7 @@ var Coin = Entity.extend({
 		this.size = 8;
 		for (var i = 10; i >= 0; i--) {
 
-			console.log('part');
+			// console.log('part');
 			tempParticle = new PIXI.Graphics();
 			tempParticle.beginFill(0xFFFFFF);
 			tempParticle.drawRect(-this.size/2,-this.size/2,this.size,this.size);

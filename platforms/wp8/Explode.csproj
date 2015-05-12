@@ -223,9 +223,15 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\com.rjfun.cordova.plugin.admob\AdMob.cs" />
+        <Compile Include="Plugins\org.apache.cordova.vibration\Vibration.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.vibration\Vibration.cs" />
+        <Compile Include="Plugins\org.apache.cordova.file\File.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\org.apache.cordova.media\Media.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\org.apache.cordova.media\AudioPlayer.cs" />
     </ItemGroup>
 </Project>

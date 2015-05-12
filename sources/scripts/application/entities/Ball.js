@@ -94,7 +94,7 @@ var Ball = Entity.extend({
 		}
 		this.gravity = 0;
 		this.velocity.y = - force - ((this.gravityVal * this.gravityVal) / 1.5) * 10;
-		console.log(this.velocity.y, this.gravityVal);
+		// console.log(this.velocity.y, this.gravityVal);
 		this.firstJump = true;
 		this.inJump = true;
 	},

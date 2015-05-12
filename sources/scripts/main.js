@@ -182,7 +182,7 @@ function fullscreen(){
 // alert(window.intel);
 
 // window.intel = true;
-window.console.log = function(){};
+// window.console.log = function(){};
 // initialize();
 function registerAdEvents() {
 	// alert('register');

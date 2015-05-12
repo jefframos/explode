@@ -9,7 +9,15 @@
                 "parents": {
                     "/Deployment/App/Capabilities": [
                         {
-                            "xml": "<Capability Name=\"ID_CAP_LOCATION\" />",
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_AUDIO\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_PLAYBACK\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MICROPHONE\" />",
                             "count": 1
                         }
                     ]
@@ -19,11 +27,15 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"AdMob\"><param name=\"wp-package\" value=\"AdMob\" /></feature>",
+                            "xml": "<feature name=\"Vibration\"><param name=\"wp-package\" value=\"Vibration\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Vibration\"><param name=\"wp-package\" value=\"Vibration\" /></feature>",
+                            "xml": "<feature name=\"File\"><param name=\"wp-package\" value=\"File\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Media\"><param name=\"wp-package\" value=\"Media\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -35,15 +47,19 @@
         "com.google.admobsdk": {
             "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
         },
-        "com.rjfun.cordova.plugin.admob": {
-            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
         },
         "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
+        },
+        "org.apache.cordova.media": {
+            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "{bb175b00-f811-11e4-9a51-0d348fe31c93}"
+        }
+    }
 }
