@@ -1,4 +1,4 @@
-/*! jefframos 12-05-2015 */
+/*! jefframos 22-05-2015 */
 function rgbToHsl(r, g, b) {
     r /= 255, g /= 255, b /= 255;
     var h, s, max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2;
@@ -154,7 +154,15 @@ function fullscreen() {
 }
 
 function registerAdEvents() {
-    document.addEventListener("onReceiveAd", function() {
+    window.plugins.AdMob.setOptions({
+        publisherId: "ca-app-pub-9306461054994106/4577256772",
+        interstitialAdId: "ca-app-pub-9306461054994106/6053989976",
+        bannerAtTop: !1,
+        overlap: !1,
+        offsetTopBar: !1,
+        isTesting: !0,
+        autoShow: !0
+    }), document.addEventListener("onReceiveAd", function() {
         alert("onReceiveAd");
     }), document.addEventListener("onFailedToReceiveAd", function(data) {
         alert(JSON.stringify(data));
@@ -170,11 +178,11 @@ function registerAdEvents() {
         alert("onPresentInterstitialAd");
     }), document.addEventListener("onDismissInterstitialAd", function() {
         alert("onDismissInterstitialAd");
-    });
+    }), window.plugins.AdMob.createBannerView();
 }
 
 function deviceReady() {
-    initialize();
+    setTimeout(registerAdEvents, 500), initialize();
 }
 
 var Application = AbstractApplication.extend({
@@ -321,19 +329,17 @@ var Application = AbstractApplication.extend({
     }
 }), AudioController = Class.extend({
     init: function() {
-        function loadError(error) {
-            alert(error.message);
-        }
+        function loadError(error) {}
         function end() {
             self.updateAudioList(this);
         }
         function load() {
-            alert("load"), self.currentLoaded++, self.currentLoaded >= self.audioList.length && (self.loadedAudioComplete = !0, 
+            self.currentLoaded++, self.currentLoaded >= self.audioList.length && (self.loadedAudioComplete = !0, 
             self.onCompleteCallback && self.onCompleteCallback());
         }
         this.audioList = [ {
             label: "loop",
-            urls: [ "www/dist/audio/loop.mp3", "sounds/loop.mp3", "dist/audio/wub.ogg" ],
+            urls: [ "dist/audio/loop.mp3", "sounds/loop.mp3", "dist/audio/wub.ogg" ],
             volume: .1,
             loop: !0
         }, {
@@ -410,7 +416,7 @@ var Application = AbstractApplication.extend({
     playSound: function(id) {
         for (var audioP = null, i = this.audios.length - 1; i >= 0; i--) this.audios[i].label === id && (audioP = this.audios[i].audio, 
         audioP.play(), this.playingAudios.push(audioP));
-        return console.log(audioP), audioP;
+        return audioP;
     },
     stopSound: function(id) {
         for (var audioP = null, i = this.audios.length - 1; i >= 0; i--) if (this.audios[i].label === id) {
@@ -662,12 +668,11 @@ var Application = AbstractApplication.extend({
         for (var before = 0, i = 1; i <= this.title.length; i++) tempText = new PIXI.Text(this.title[i - 1], {
             align: "center",
             font: "48px Vagron",
-            fill: APP.vecColorsS[this.tempCounter],
-            stroke: "#FFFFFF",
-            strokeThickness: 5
-        }), tempText.resolution = 2, tempText.sin = .5 * i, tempText.position.x = this.container.width + before / 4, 
+            fill: "#FFFFFF"
+        }), tempText.resolution = 2, tempText.sin = .5 * i, tempText.position.x = this.container.width + before / 10, 
         tempText.position.y = 50 * Math.sin(tempText.sin), this.container.addChild(tempText), 
-        before = tempText.width, this.vecLetters.push(tempText), this.tempCounter++, this.tempCounter >= APP.vecColorsS.length && (this.tempCounter = 0);
+        before = tempText.width / 2, this.vecLetters.push(tempText), this.tempCounter++, 
+        this.tempCounter >= APP.vecColorsS.length && (this.tempCounter = 0);
         var self = this;
         clearInterval(this.interval), this.interval = setInterval(function() {
             self.screen.changeColor(!1, !1, !0);
@@ -683,15 +688,7 @@ var Application = AbstractApplication.extend({
         if (this.updateable) {
             var changeColors = !1;
             this.colorsCounter--, this.colorsCounter < 0 && (changeColors = !0, this.colorsCounter = 200);
-            for (var i = 0; i < this.vecLetters.length; i++) this.vecLetters[i].position.y = 50 * Math.sin(this.vecLetters[i].sin += .2), 
-            (changeColors || Math.random() < .05) && (this.tempCounter++, this.tempCounter >= APP.vecColorsS.length && (this.tempCounter = 0), 
-            this.vecLetters[i].setStyle({
-                align: "center",
-                font: "48px Vagron",
-                fill: APP.vecColorsS[this.tempCounter],
-                stroke: "#FFFFFF",
-                strokeThickness: 5
-            }));
+            for (var i = 0; i < this.vecLetters.length; i++) this.vecLetters[i].position.y = 50 * Math.sin(this.vecLetters[i].sin += .2);
         }
     }
 }), EnemyBall = Entity.extend({

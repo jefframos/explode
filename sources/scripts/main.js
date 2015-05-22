@@ -55,18 +55,18 @@ function updateResolution(orientation, scale){
 		if(screen.height > screen.width){
 			windowWidth = screen.width * scale;
 			windowWidthVar = screen.width;
-			
+
 			if(possibleFullscreen()){
 				windowHeight =  screen.height * scale;
 				windowHeightVar =  screen.height;
-				
+
 			}else{
 				windowHeight =  window.devicePixelRatio >= 2 ? window.innerHeight * scale : window.outerHeight * scale;//window.outerHeight * scale;
-				
+
 				windowHeight =  window.outerHeight * scale;
 				windowHeightVar =  window.outerHeight* scale;
 			}
-			
+
 
 		}else{
 			windowWidth = screen.height * scale;
@@ -122,7 +122,7 @@ function update() {
 		init = true;
 		// alert(windowWidthVar+' - '+windowHeightVar);
 	}
-	
+
 	// meter.tickStart();
 	// var tempRation =  (window.innerHeight/windowHeight);
 	// var ratioRez = resizeProportional ? tempRation < (window.innerWidth/realWindowWidth)?tempRation:(window.innerWidth/realWindowWidth) : 1;
@@ -145,7 +145,7 @@ function update() {
 		// renderer.view.style.height = window.innerHeight+'px';
 		// renderer.view.style.width = window.innerWidth+'px';
 
-		
+
 		APP.update();
 		renderer.render(APP.stage);
 	}
@@ -186,6 +186,15 @@ function fullscreen(){
 // initialize();
 function registerAdEvents() {
 	// alert('register');
+	window.plugins.AdMob.setOptions( {
+        publisherId: 'ca-app-pub-9306461054994106/4577256772',
+        interstitialAdId: 'ca-app-pub-9306461054994106/6053989976',
+        bannerAtTop: false, // set to true, to put banner at top
+        overlap: false, // set to true, to allow banner overlap webview
+        offsetTopBar: false, // set to true to avoid ios7 status bar overlap
+        isTesting: true, // receiving test ad
+        autoShow: true
+    });
 	document.addEventListener('onReceiveAd', function(){alert('onReceiveAd');});
     document.addEventListener('onFailedToReceiveAd', function(data){alert(JSON.stringify(data));});
     document.addEventListener('onPresentAd', function(){alert('onPresentAd');});
@@ -194,9 +203,14 @@ function registerAdEvents() {
     document.addEventListener('onReceiveInterstitialAd', function(){ alert('onReceiveInterstitialAd');});
     document.addEventListener('onPresentInterstitialAd', function(){ alert('onPresentInterstitialAd');});
     document.addEventListener('onDismissInterstitialAd', function(){ alert('onDismissInterstitialAd');});
+	window.plugins.AdMob.createBannerView();
+   //window.plugins.AdMob.requestAd(true,function(){},function(e){alert(JSON.stringify(e));});
+	//window.plugins.AdMob.showAd(true,function(){},function(e){alert(JSON.stringify(e));});
 }
 
 function deviceReady(){
+	setTimeout(registerAdEvents, 500);
+	// registerAdEvents();
 	initialize();
 }
 var apps = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;

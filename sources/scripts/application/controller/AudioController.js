@@ -11,7 +11,7 @@ var AudioController = Class.extend({
 		this.audioList = [
 			{
 				label:'loop',
-				urls: ['www/dist/audio/loop.mp3','sounds/loop.mp3','dist/audio/wub.ogg'],
+				urls: ['dist/audio/loop.mp3','sounds/loop.mp3','dist/audio/wub.ogg'],
 				// urls: ['dist/audio/star.mp3'],
 				volume: 0.1,
 				loop: true
@@ -122,7 +122,7 @@ var AudioController = Class.extend({
 			this.audios.push(tempObj);
 			// });
 		}
-		
+
 		this.currentLoaded = 0;
 		// this.ambientSound1 = new Howl({
 		// 	urls: ['dist/audio/trilha.mp3', 'dist/audio/trilha.ogg'],
@@ -164,7 +164,7 @@ var AudioController = Class.extend({
 			}
 		}
 		// alert(audioP);
-		console.log(audioP);
+		// console.log(audioP);
 		return audioP;
 	},
 	stopSound:function(id){

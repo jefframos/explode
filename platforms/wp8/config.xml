@@ -9,6 +9,9 @@
     <feature name="Media">
         <param name="wp-package" value="Media" />
     </feature>
+    <feature name="AdMob">
+        <param name="wp-package" value="AdMob" />
+    </feature>
     <name>Explode</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.

@@ -218,11 +218,6 @@
         </PostBuildEvent>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="GoogleAds">
-            <HintPath>plugins\com.google.admobsdk\GoogleAds.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
         <Compile Include="Plugins\org.apache.cordova.vibration\Vibration.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -233,5 +228,13 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Plugins\org.apache.cordova.media\AudioPlayer.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="GoogleAds">
+            <HintPath>plugins\com.google.admobsdk\GoogleAds.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\com.rjfun.cordova.plugin.admob\AdMob.cs" />
     </ItemGroup>
 </Project>

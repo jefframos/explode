@@ -15,14 +15,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.google.admobsdk": {
-        "source": {
-            "type": "registry",
-            "id": "com.google.admobsdk"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
     "com.google.playservices": {
         "source": {
             "type": "registry",
@@ -43,6 +35,22 @@
         "source": {
             "type": "registry",
             "id": "org.apache.cordova.file"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
+    "com.rjfun.cordova.plugin.admob": {
+        "source": {
+            "type": "registry",
+            "id": "com.rjfun.cordova.plugin.admob"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.google.admobsdk": {
+        "source": {
+            "type": "registry",
+            "id": "com.google.admobsdk"
         },
         "is_top_level": false,
         "variables": {}

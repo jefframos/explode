@@ -19,14 +19,6 @@
                     ],
                     "/*": [
                         {
-                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
-                        },
-                        {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
                             "count": 2
                         },
@@ -40,6 +32,14 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
                             "count": 1
                         }
                     ],
@@ -69,6 +69,10 @@
                         {
                             "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AdMob\"><param name=\"android-package\" value=\"com.rjfun.cordova.plugin.AdMob\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -76,9 +80,6 @@
         }
     },
     "installed_plugins": {
-        "com.google.admobsdk": {
-            "PACKAGE_NAME": "me.jefframos.explode"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "me.jefframos.explode"
         },
@@ -87,6 +88,9 @@
         },
         "org.apache.cordova.media": {
             "PACKAGE_NAME": "me.jefframos.explode"
+        },
+        "com.rjfun.cordova.plugin.admob": {
+            "PACKAGE_NAME": "me.jefframos.explode"
         }
     },
     "dependent_plugins": {
@@ -94,6 +98,9 @@
             "PACKAGE_NAME": "me.jefframos.explode"
         },
         "org.apache.cordova.file": {
+            "PACKAGE_NAME": "me.jefframos.explode"
+        },
+        "com.google.admobsdk": {
             "PACKAGE_NAME": "me.jefframos.explode"
         }
     }

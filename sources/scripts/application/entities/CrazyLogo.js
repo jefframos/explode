@@ -21,17 +21,18 @@ var CrazyLogo = Entity.extend({
 			// this.container.addChild(tempText);
 
 			// tempText = new PIXI.Text(this.title[i - 1], {align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter]});
-			tempText = new PIXI.Text(this.title[i - 1], {align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter], stroke:'#FFFFFF', strokeThickness:5});
-			console.log(this.title[i - 1], tempText.width);
+			tempText = new PIXI.Text(this.title[i - 1], {align:'center',font:'48px Vagron', fill:'#FFFFFF'});
+			// tempText = new PIXI.Text(this.title[i - 1], {align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter], stroke:'#FFFFFF', strokeThickness:5});
+			// console.log(this.title[i - 1], tempText.width);
 			// tempText = new PIXI.Text(this.title[i], {align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter]});//, stroke:'#FFFFFF', strokeThickness:3});
 			tempText.resolution = 2;
 			tempText.sin = i * 0.5;
-			tempText.position.x =this.container.width + before / 4;// - 35 / 2;
+			tempText.position.x =(this.container.width) + before / 10;// - 35 / 2;
 			tempText.position.y = Math.sin(tempText.sin) * 50;
-			console.log(tempText.position.y);
+			// console.log(tempText.position.y);
 			this.container.addChild(tempText);
 
-			before = tempText.width;
+			before = tempText.width / 2;
 			this.vecLetters.push(tempText);
 			this.tempCounter ++;
 			if(this.tempCounter >= APP.vecColorsS.length){
@@ -43,6 +44,8 @@ var CrazyLogo = Entity.extend({
 		this.interval = setInterval(function(){
 			self.screen.changeColor(false,false,true);
 		}, 1000);
+
+		// this.updateable = false;
 	},
 	removeInterval: function(){
 		clearInterval(this.interval);
@@ -64,15 +67,15 @@ var CrazyLogo = Entity.extend({
 		for (var i = 0; i < this.vecLetters.length; i++) {
 			// console.log(this.tempCounter);
 			this.vecLetters[i].position.y = Math.sin(this.vecLetters[i].sin += 0.20) * 50;
-			if(changeColors || Math.random() < 0.05){
-				this.tempCounter ++;//Math.floor(Math.random() * APP.vecColorsS.length);
-				if(this.tempCounter >= APP.vecColorsS.length){
-					this.tempCounter = 0;
-				}
-				// var tempColor = addBright(APP.vecColors[this.tempCounter],0.65).toString().replace(2, 7);
-				// this.vecLetters[i].setStyle({align:'center',font:'48px Vagron', fill:'#'+tempColor});
-				this.vecLetters[i].setStyle({align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter], stroke:'#FFFFFF', strokeThickness:5});
-			}
+			// if(changeColors || Math.random() < 0.05){
+			// 	this.tempCounter ++;//Math.floor(Math.random() * APP.vecColorsS.length);
+			// 	if(this.tempCounter >= APP.vecColorsS.length){
+			// 		this.tempCounter = 0;
+			// 	}
+			// 	// var tempColor = addBright(APP.vecColors[this.tempCounter],0.65).toString().replace(2, 7);
+			// 	// this.vecLetters[i].setStyle({align:'center',font:'48px Vagron', fill:'#'+tempColor});
+			// 	// this.vecLetters[i].setStyle({align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter], stroke:'#FFFFFF', strokeThickness:5});
+			// }
 			// this.vecLetters[i].setStyle({align:'center',font:'48px Vagron', fill:APP.vecColorsS[this.tempCounter]});//, stroke:'#FFFFFF', strokeThickness:3});
 		}
 	},
