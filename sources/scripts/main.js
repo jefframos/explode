@@ -184,17 +184,8 @@ function fullscreen(){
 // window.intel = true;
 // window.console.log = function(){};
 // initialize();
+// function registerAdEvents() {
 function registerAdEvents() {
-	// alert('register');
-	window.plugins.AdMob.setOptions( {
-        publisherId: 'ca-app-pub-9306461054994106/4577256772',
-        interstitialAdId: 'ca-app-pub-9306461054994106/6053989976',
-        bannerAtTop: false, // set to true, to put banner at top
-        overlap: false, // set to true, to allow banner overlap webview
-        offsetTopBar: false, // set to true to avoid ios7 status bar overlap
-        isTesting: true, // receiving test ad
-        autoShow: true
-    });
 	document.addEventListener('onReceiveAd', function(){alert('onReceiveAd');});
     document.addEventListener('onFailedToReceiveAd', function(data){alert(JSON.stringify(data));});
     document.addEventListener('onPresentAd', function(){alert('onPresentAd');});
@@ -203,14 +194,85 @@ function registerAdEvents() {
     document.addEventListener('onReceiveInterstitialAd', function(){ alert('onReceiveInterstitialAd');});
     document.addEventListener('onPresentInterstitialAd', function(){ alert('onPresentInterstitialAd');});
     document.addEventListener('onDismissInterstitialAd', function(){ alert('onDismissInterstitialAd');});
-	window.plugins.AdMob.createBannerView();
-   //window.plugins.AdMob.requestAd(true,function(){},function(e){alert(JSON.stringify(e));});
-	//window.plugins.AdMob.showAd(true,function(){},function(e){alert(JSON.stringify(e));});
+}
+// 	// alert('register');
+// 	window.plugins.AdMob.setOptions( {
+//         publisherId: 'ca-app-pub-9306461054994106/4577256772',
+//         interstitialAdId: 'ca-app-pub-9306461054994106/6053989976',
+//         bannerAtTop: false, // set to true, to put banner at top
+//         overlap: false, // set to true, to allow banner overlap webview
+//         offsetTopBar: false, // set to true to avoid ios7 status bar overlap
+//         isTesting: true, // receiving test ad
+//         autoShow: true
+//     });
+// 	document.addEventListener('onReceiveAd', function(){alert('onReceiveAd');});
+//     document.addEventListener('onFailedToReceiveAd', function(data){alert(JSON.stringify(data));});
+//     document.addEventListener('onPresentAd', function(){alert('onPresentAd');});
+//     document.addEventListener('onDismissAd', function(){ alert('onDismissAd');});
+//     document.addEventListener('onLeaveToAd', function(){ alert('onLeaveToAd');});
+//     document.addEventListener('onReceiveInterstitialAd', function(){ alert('onReceiveInterstitialAd');});
+//     document.addEventListener('onPresentInterstitialAd', function(){ alert('onPresentInterstitialAd');});
+//     document.addEventListener('onDismissInterstitialAd', function(){ alert('onDismissInterstitialAd');});
+// 	window.plugins.AdMob.createBannerView();
+//    //window.plugins.AdMob.requestAd(true,function(){},function(e){alert(JSON.stringify(e));});
+// 	//window.plugins.AdMob.showAd(true,function(){},function(e){alert(JSON.stringify(e));});
+// }
+
+
+
+
+function initAd() {
+    if (window.plugins && window.plugins.AdMob) {
+        alert('havePLugin');
+        // Banner
+        window.plugins.AdMob.createBannerView({
+            'publisherId': 'ca-app-pub-9306461054994106/4577256772',
+            'adSize': window.plugins.AdMob.AD_SIZE.SMART_BANNER,
+            'bannerAtTop': false
+        },
+	    function () {
+	        window.plugins.AdMob.requestAd({
+	            'isTesting': true
+	        },
+	         function () {
+	             // Advert request ok
+	            window.plugins.AdMob.showAd(true);
+	        },
+	         function () {
+	            // Advert request failed
+	        });
+	    },
+	    function () {
+	        // Failed to create banner view
+	    });
+
+        // Interstitial
+        window.plugins.AdMob.createInterstitialView({
+            'publisherId': 'ca-app-pub-9306461054994106/6053989976'
+        },
+	    function () {
+	        window.plugins.AdMob.requestInterstitialAd({
+	            'isTesting': true
+	        },
+	        function () {
+	            // Advert request ok
+	            window.plugins.AdMob.showInterstitialAd(true);
+	        },
+	        function () {
+	            // Advert request failed
+	        });
+	    },
+	    function () {
+	        // Failed to create interstitial view
+	    });
+    }
+
 }
 
 function deviceReady(){
 	setTimeout(registerAdEvents, 500);
 	// registerAdEvents();
+	initAd();
 	initialize();
 }
 var apps = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -224,6 +286,17 @@ if ( apps ) {
     // deviceReady();
 }
 
+// optional, in case respond to events
+// function registerAdEvents() {
+//     document.addEventListener('onReceiveAd', function () { });
+//     document.addEventListener('onFailedToReceiveAd', function (data) { });
+//     document.addEventListener('onPresentAd', function () { });
+//     document.addEventListener('onDismissAd', function () { });
+//     document.addEventListener('onLeaveToAd', function () { });
+//     document.addEventListener('onReceiveInterstitialAd', function () { });
+//     document.addEventListener('onPresentInterstitialAd', function () { });
+//     document.addEventListener('onDismissInterstitialAd', function () { });
+// }
 // document.addEventListener('deviceready', function() {
 // 	// alert(admobAd);
 // 	// window.plugins.AdMob.setOptions( {

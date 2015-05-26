@@ -1,4 +1,4 @@
-/*! jefframos 22-05-2015 */
+/*! jefframos 25-05-2015 */
 function rgbToHsl(r, g, b) {
     r /= 255, g /= 255, b /= 255;
     var h, s, max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2;
@@ -154,15 +154,7 @@ function fullscreen() {
 }
 
 function registerAdEvents() {
-    window.plugins.AdMob.setOptions({
-        publisherId: "ca-app-pub-9306461054994106/4577256772",
-        interstitialAdId: "ca-app-pub-9306461054994106/6053989976",
-        bannerAtTop: !1,
-        overlap: !1,
-        offsetTopBar: !1,
-        isTesting: !0,
-        autoShow: !0
-    }), document.addEventListener("onReceiveAd", function() {
+    document.addEventListener("onReceiveAd", function() {
         alert("onReceiveAd");
     }), document.addEventListener("onFailedToReceiveAd", function(data) {
         alert(JSON.stringify(data));
@@ -178,11 +170,33 @@ function registerAdEvents() {
         alert("onPresentInterstitialAd");
     }), document.addEventListener("onDismissInterstitialAd", function() {
         alert("onDismissInterstitialAd");
-    }), window.plugins.AdMob.createBannerView();
+    });
+}
+
+function initAd() {
+    window.plugins && window.plugins.AdMob && (alert("havePLugin"), window.plugins.AdMob.createBannerView({
+        publisherId: "ca-app-pub-9306461054994106/4577256772",
+        adSize: window.plugins.AdMob.AD_SIZE.SMART_BANNER,
+        bannerAtTop: !1
+    }, function() {
+        window.plugins.AdMob.requestAd({
+            isTesting: !0
+        }, function() {
+            window.plugins.AdMob.showAd(!0);
+        }, function() {});
+    }, function() {}), window.plugins.AdMob.createInterstitialView({
+        publisherId: "ca-app-pub-9306461054994106/6053989976"
+    }, function() {
+        window.plugins.AdMob.requestInterstitialAd({
+            isTesting: !0
+        }, function() {
+            window.plugins.AdMob.showInterstitialAd(!0);
+        }, function() {});
+    }, function() {}));
 }
 
 function deviceReady() {
-    setTimeout(registerAdEvents, 500), initialize();
+    setTimeout(registerAdEvents, 500), initAd(), initialize();
 }
 
 var Application = AbstractApplication.extend({
